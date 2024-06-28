@@ -1,0 +1,30 @@
+version: "3.8"
+services:
+  clickhouse:
+    image: "clickhouse/clickhouse-server:${CHVER:-latest}"
+    user: "101:101"
+    container_name: "clickhouse"
+    hostname: "clickhouse"
+    ports:
+      - '127.0.0.1:8123:8123'
+      - '127.0.0.1:9000:9000'
+    environment:
+      CLICKHOUSE_DB: storage
+      CLICKHOUSE_USER: storage_user
+      CLICKHOUSE_PASSWORD: 1
+      CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: 1
+  bootstrap:
+    container_name: bootstrap
+    image: "bootstrap"
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+    restart: unless-stopped
+volumes:
+  jenkins_home:
+    #2c438b681cf044799e2c4e2f8bceeb1f
