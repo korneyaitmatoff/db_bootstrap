@@ -1,4 +1,5 @@
 import time
+from os.path import abspath
 from db.db import ClickhouseHandler
 
 from sqlalchemy import text
@@ -34,9 +35,7 @@ def wait_until_db_available():
 
 
 if __name__ == "__main__":
-    wait_until_db_available()
-
     db = ClickhouseHandler()
 
     with db as session:
-        session.ping()
+        session.execute_sql(read_script(abspath("./scripts/sql/create_table_uk_paid.sql")))
